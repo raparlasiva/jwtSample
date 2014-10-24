@@ -2,7 +2,11 @@
 
 angular.module('acs', ['acs.filters', 'acs.services',
     'responseStringfyService',
-    'acs.directives', 'acs.controllers', 'ngRoute', 'ui.bootstrap']).
+    'userFactoryServices',
+    'acs.directives', 
+    'acs.controllers',
+    'ngRoute', 
+    'ui.bootstrap']).
 config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
 
     $routeProvider.when('/home', {
