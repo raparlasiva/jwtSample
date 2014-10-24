@@ -12,6 +12,7 @@ class Accounts extends CI_Model {
 		if ($query->num_rows() == 1)
 		{
 			$result = $query->result();
+                        //print_r($result);
 			if (validate_password($password, $result[0]->password))
 			{
 				return $result[0]->id;

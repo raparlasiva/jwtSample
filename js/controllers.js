@@ -1,9 +1,12 @@
 'use strict';
 
 var controllers = angular.module('acs.controllers', []);
-
-controllers.controller('navigation', ['$scope', '$location', 'auth', function($scope, $location, auth) {
-
+// -- navigation controller ---///
+controllers.controller('navigation', ['$scope', '$location', 'auth','authTokenFactory','authInterceptor',
+    function($scope, $location, auth) {
+    
+    alert("navigation");
+    
     $scope.user = auth.user;
 
     $scope.active = function(path) {
@@ -11,13 +14,16 @@ controllers.controller('navigation', ['$scope', '$location', 'auth', function($s
     };
     
     $scope.logout = function() {
-        $scope.user = {};
+        auth.user   = {};
+        $scope.user = auth.user;
+        //$scope.user = {};
         $location.path('home');
     };
 
 }]);
-
-controllers.controller('login', ['$scope', '$location', '$http', 'auth', function($scope, $location, $http, auth) {
+// ---login controller ----///
+controllers.controller('login', ['$scope', '$location', '$http', 'auth','authTokenFactory','authInterceptor',
+    function($scope, $location, $http, auth,authTokenFactory) {
 
     $scope.input = {};
 
@@ -26,19 +32,26 @@ controllers.controller('login', ['$scope', '$location', '$http', 'auth', functio
             email: $scope.input.email,
             password: $scope.input.password
         }).success(function(data) {
-            if (data.status) {
+            if (data.status) 
+            {
                 $scope.user = auth.user;
                 $scope.user.email = data.email;
                 $scope.user.token = data.token;
+                authTokenFactory.setToken(data.token);
                 $location.path('home');
-            } else {
+                
+            } 
+            else 
+            {
+                
             }
         });
     };
 
 }]);
-
-controllers.controller('register', ['$scope', '$location', '$http', function($scope, $location, $http) {
+// -- register controller ----///
+controllers.controller('register', ['$scope', '$location', '$http','authTokenFactory','authInterceptor', 
+    function($scope, $location, $http,authTokenFactory,authInterceptor) {
 
     $scope.input = {};
 
@@ -47,28 +60,46 @@ controllers.controller('register', ['$scope', '$location', '$http', function($sc
             email: $scope.input.email,
             password: $scope.input.password
         }).success(function(data) {
-            if (data.status) {
+            if (data.status) 
+            {
                 $location.path('login');
-            } else {
+            } 
+            else 
+            {
+                
             }
         });
     };
 
 }]);
-
-controllers.controller('home', ['$scope', '$location', '$http', 'auth', function($scope, $location, $http, auth) {
-
+// ---home controller ----
+controllers.controller('home', ['$scope', '$location', '$http', 'auth','authTokenFactory','authInterceptor', 
+    function($scope, $location, $http, auth,authTokenFactory,authInterceptor) {
+    alert("inside home ctrl");
+    console.info(auth);
     $scope.user = auth.user;
     
     $scope.information = function() {
         $http.post('api/account/information', {
             token: $scope.user.token
         }).success(function(data) {
-            if (data.status) {
+            if (data.status) 
+            {
                 alert(data.message);
-            } else {
+            } 
+            else 
+            {
+                
             }
         });
     };
+
+}]);
+//----- about controller----
+controllers.controller('about', ['$scope', '$location', '$http', 'auth','authTokenFactory','authInterceptor',
+    function($scope, $location, $http, auth) {
+    alert("inside about ctrl");
+    console.info(auth);
+   
 
 }]);

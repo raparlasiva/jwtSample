@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('acs', ['acs.filters', 'acs.services', 'acs.directives', 'acs.controllers', 'ngRoute', 'ui.bootstrap']).
+angular.module('acs', ['acs.filters', 'acs.services',
+    'responseStringfyService',
+    'acs.directives', 'acs.controllers', 'ngRoute', 'ui.bootstrap']).
 config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
 
     $routeProvider.when('/home', {
@@ -28,7 +30,8 @@ config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvide
     });
 
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
+    $httpProvider.interceptors.push('authInterceptor');
+    
     var param = function(obj) {
         var query = '',
             name, value, fullSubName, subName, subValue, innerObj, i;
@@ -67,18 +70,32 @@ config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvide
             }
             else if (value !== undefined && value !== null) 
             {
-                console.info("value not instance of object and array");
+                alert("value not instance of object and array");
+                //console.info("value not instance of object and array");
                 query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
-                
-                console.info(query);
+                //alert(query);
+                //console.info(query);
             }
         }
-
+        alert(query.length);
+        if(query.length)
+        {
+            alert(query.substr(0, query.length - 1));
+            query.substr(0, query.length - 1)
+        }
+        else
+        {
+            query;
+        }    
+        
+       //alert(query);
+        
         return query.length ? query.substr(0, query.length - 1) : query;
+        
     };
 
     $httpProvider.defaults.transformRequest = [function(data) {
-        console.info(data);
+        //console.info(data);
         if(angular.isObject(data) && String(data) !== '[object File]')
         {
             alert("not equal to")

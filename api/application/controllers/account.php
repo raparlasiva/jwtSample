@@ -56,11 +56,14 @@ class Account extends CI_Controller {
 	{
 		$output = array();
 		$output['status'] = false;
+                // form validation goes here //
 		$this->form_validation->set_rules('email', 'email', 'required|valid_email|is_unique[accounts.email]|max_length[256]');
 		$this->form_validation->set_rules('password', 'password', 'required|min_length[8]|max_length[256]');
 		$this->form_validation->set_error_delimiters('', '');
 		$validated = $this->form_validation->run();
-		if ($validated)
+		
+                // if form is validated
+                if ($validated)
 		{
 			$email = $this->input->post('email');
 			$password = $this->input->post('password');
@@ -71,6 +74,7 @@ class Account extends CI_Controller {
 		{
 			$output['errors'] = validation_errors();
 		}
+                
 		$this->load->view('json', array('output' => $output));
 	}
 	
@@ -78,6 +82,9 @@ class Account extends CI_Controller {
 		$output = array();
 		$output['status'] = false;
 		$token = $this->authenticate();
+                //echo $token;
+                //print_r($token);
+                
 		if ($token !== false)
 		{
 			$output['status'] = true;
