@@ -32,12 +32,20 @@ config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvide
     var param = function(obj) {
         var query = '',
             name, value, fullSubName, subName, subValue, innerObj, i;
-
-        for (name in obj) {
+        alert("here inside applicationJS file");
+        console.info(obj);
+        for (name in obj) 
+        {
             value = obj[name];
-
-            if (value instanceof Array) {
-                for (i = 0; i < value.length; ++i) {
+            
+            console.info(value);
+            
+            if (value instanceof Array) 
+            {
+                console.info("value instance of arry");
+                
+                for (i = 0; i < value.length; ++i) 
+                {
                     subValue = value[i];
                     fullSubName = name + '[' + i + ']';
                     innerObj = {};
@@ -45,8 +53,11 @@ config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvide
                     query += param(innerObj) + '&';
                 }
             }
-            else if (value instanceof Object) {
-                for (subName in value) {
+            else if (value instanceof Object) 
+            {
+                console.info("value instance of object");
+                for (subName in value) 
+                {
                     subValue = value[subName];
                     fullSubName = name + '[' + subName + ']';
                     innerObj = {};
@@ -54,13 +65,28 @@ config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvide
                     query += param(innerObj) + '&';
                 }
             }
-            else if (value !== undefined && value !== null) query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+            else if (value !== undefined && value !== null) 
+            {
+                console.info("value not instance of object and array");
+                query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+                
+                console.info(query);
+            }
         }
 
         return query.length ? query.substr(0, query.length - 1) : query;
     };
 
     $httpProvider.defaults.transformRequest = [function(data) {
+        console.info(data);
+        if(angular.isObject(data) && String(data) !== '[object File]')
+        {
+            alert("not equal to")
+        }
+        else
+        {
+            alert("equal to");
+        }    
         return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
     }];
     
