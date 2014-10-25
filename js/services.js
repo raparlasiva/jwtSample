@@ -15,7 +15,8 @@
     tokenServices.factory('authTokenFactory',['$window', function($window) {
         var store = $window.localStorage;
         
-        var key = 'auth-token';
+        var key   = 'auth-token';
+        
         return {
             getToken: getToken,
             setToken: setToken

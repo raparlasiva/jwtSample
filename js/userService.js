@@ -4,7 +4,6 @@
     .constant('API_URL','http://'+location.hostname+'/angular-codeigniter-seed-maste/api/account');
     
     userFactoryServices.factory('userFactory',['authTokenFactory','$http','API_URL', function userFactory(authTokenFactory,$http,API_URL) {
-        alert("here");
         return {
             login: login,
             logout: logout
